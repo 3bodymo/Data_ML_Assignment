@@ -12,7 +12,7 @@ then
         rm "$API_PID_FILE"
     fi
     echo "RUNNING INFERENCE API"
-    nohup sh -c 'python src/api/main.py' 2>&1 > api.log &
+    nohup sh -c 'python main.py' 2>&1 > api.log &
     echo $! > "$API_PID_FILE"
 fi
 

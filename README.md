@@ -1,135 +1,83 @@
-# DNA Engineering ML Assignment
+# DNA Engineering - ML Assignment
 
-## Requirements
-- Python 3.9 or higher.
+This repository contains the code and documentation for the Streamlit dashboard assignment. In this project, I was tasked with refactoring and enhancing a Streamlit dashboard that includes Exploratory Data Analysis, Training a machine learning model, and Inference (prediction).
 
-#### - Install pipenv on your global python setup
-```Python
-    pip install pipenv 
-```
-Or follow [documentation](https://pipenv.pypa.io/en/latest/install/) to install it properly on your system
-#### - Install requirements
-```sh
-    cd data-ml-assignment
-```
-```Python
-    pipenv install
-```
-```Python
-    pipenv shell
-```
-#### - Start the application
-```sh
-    sh run.sh
-```
-- API : http://localhost:8000
-- Streamlit Dashboard : http://localhost:9000
+## Project Setup
 
-P.S You can check the log files for any improbable issues with your execution.
-## Before we begin
-- In this assignement, you will be asked to write, refactor, and test code. 
-- Make sure you respect clean code guidelines.
-- Some parts of the already existing code are bad. Your job is to refactor them.
-- Read the assignement carefully.
-- Read the code thoroughly before you begin coding.
+Before starting the tasks, I encountered an issue with the backend where the `main.py` file was not in the correct place. I resolved this problem by moving `main.py` to the project's root directory.
 
-## Description
-This mini project is a data app that revolves around resume text classification.
+Before run my project, ensure you have the following packages installed:
 
-You are given a `dataset` that contains a number of resumes with their labels.
+- [WordCloud](https://pypi.org/project/wordcloud/)
+- [SQLAlchemy](https://pypi.org/project/SQLAlchemy/)
 
-Each row of the dataset contains:
-- Label 1, 2, ..., 13 You will find the resume labels map under src/constants
-- Resume text
+## Task 1 - Code Refactoring
 
-The project contains by default:
-- A baseline `naive bayes pipeline` trained on the aforementioned dataset
-- An `API` that exposes an `inference endpoint` for predictions using the baseline pipeline
-- A streamlit dashboard divided on three parts `(Exploratory Data Analysis, Training, Inference)`
+I refactored the codebase following clean code guidelines. The main improvements are as follows:
 
-## Assignment
-### 1 - Code Refactoring
-`Streamlit` is a component-based data app creator that allows you to create interactive dashboards using Python. 
+- Split the monolithic `dashboard.py` script into three separate files, one for each section (EDA, Training, Inference). These components are now located in the `components` directory.
+- Reformat the code for readability and maintainability.
 
-While Streamlit is easy to use by "non frontenders", it can easily turn into a complicated piece of code.
+Additionally, I sought out and addressed any other code anomalies throughout the entire project to improve the codebase further.
 
-As mentioned previously, the streamlit dashboard you have at hand is divided into 3 sections:
-- Exploratory Data Analysis
-- Training
-- Inference
+**For example**, there was an error in the display of the title of the confusion matrix; it was a fixed title for `Naive Bayes``, and I made it dynamic, and it changed based on the model that the user chose.
 
-The code for the dashboard is written into one long Python (`dashboard.py`) script which makes it long, unoptimized, hard to read, hard to maintain, and hard to upgrade.
+## Task 2 - Exploratory Data Analysis
 
-Your job is to:
-- Rewrite the code while respecting `clean code` guidelines.
-- `Refactor` the script and dissociate the components.
-- Create the appropriate `abstraction` to make it easy to add components on top of the existing code.
+I conducted Exploratory Data Analysis and added it to the first section of the Streamlit dashboard. The EDA included the following steps:
 
-`Bonus points`: if you pinpoint any other code anomalies across the whole project and correct them.
+- Displayed a random sample of the dataset.
+- Provided a count of labels for both raw and processed data.
+- Showed summary statistics for the data.
+- Implemented a user-friendly interface for selecting labels and specifying the number of words to visualize cloud data.
 
-### 2 - Exploratory Data Analysis
-In this section, you are asked to explore the dataset you are provided and derive insights from it:
-- Statistical Descriptions
-- Charts
+I used Streamlit widgets to display pandas dataframes, charts, and interactive components to enhance the user experience.
 
-Your EDA must be added to the first section of the streamlit dashboard.
+## Task 3 - Training
 
-P.S: You can add data processing in this section if needed.
+I aimed to beat the baseline pipeline. Here are the key steps I took:
 
-![](./static/eda.png)
+- Preprocessed the data by removing unimportant characters and stop words.
+- Balanced the dataset using RandomOverSampler.
+- Created a selection box in the Streamlit web app, allowing users to choose the model they wanted to train.
 
-Hints: Please refer to the [documentation](https://docs.streamlit.io/library/api-reference) to learn more on how to use Streamlit `widgets` in order to display: `pandas dataframes`, `charts`, `tables`, etc, as well as interactive components: `text inputs`, `buttons`, `sliders`, etc.
+I trained various models and here are the results:
 
-### 3 - Training 
-In this section, you are asked to `beat` the baseline pipeline. 
+| Model         | Accuracy | F1 Score |
+| ------------- | -------- | -------- |
+| Random Forest | 0.9594   | 0.9595   |
+| XGBC          | 0.9574   | 0.9571   |
+| Naive Bayes   | 0.9128   | 0.911    |
+| SVC           | 0.9128   | 0.9115   |
+| Decision Tree | 0.9594   | 0.9602   |
+| KNN           | 0.8945   | 0.8946   |
 
-The trained pipeline is a combination of a Count Vectorizer and a Naive Bayes model
+The user can select the desired model for training, providing flexibility and insight into model performance.
 
-The goal is to capitalize on what you have discovered during the `EDA phase` and use the insights you derived in order to create a pipeline that performs `better` than the baseline you were provided.
+## Task 4 - Inference
 
-The higher the `F1 score` the better.
+I enhanced the Inference section of the dashboard by:
 
-You can `trigger` the baseline pipeline `training` in the `second` section of the `dashboard`.
+**1. Saving Predictions:**
+I implemented an endpoint, `api/save`, accessible through the dashboard, to save prediction results into an SQLite table. The results include resume and prediction.
 
-Choose the `name` of the pipeline and whether you want to `serialize` it.
+**2. Displaying Predictions:**
+After each inference, I added a feature to display the prediction results, allowing users to review old predictions conveniently.
 
-![](./static/training.png)
+## Task 5 - Unit Testing
 
-Click `Train pipeline` and wait until the training is done...
+As part of this project, I ensured that the code is thoroughly tested using unit tests.
 
-![](./static/training_current.png)
+I specifically wrote two unit tests for the following API endpoints:
 
-Once done, you will be able to see the F1 score as well as the confusion matrix.
+**1. `api/inference`:**
+The test checks the functionality of the inference endpoint.
 
-P.S: If you chose the `save option` at the beginning of the training, you will be able to see the serialized pipeline under `models/pipeline_name`
+**2. `api/save`:**
+The test verifies the correctness of the save endpoint, ensuring that predictions are correctly saved to the SQLite table and retrieval to the user.
 
-![](./static/training_result.png)
+## Additional Notes
 
-Hints: 
-- Make sure to change the training pipeline before you can trigger the training of your own from the dashboard.
-- Make sure to add a vectorization method to your pipeline if missing.
-- Your model must respect the abstraction used to build the baseline
+Feel free to explore the code and the Streamlit dashboard to interact with the components and see the results of each task.
 
-### 4 - Inference
-
-`Inference` is just a fancy word to say `prediction`.
-
-In the third section of the dashboard, you can `choose` different `resumes` and run the serialized pipeline against them.
-
-![](./static/inference.png)
-
-The example shows an inference for a Java Developer resume:
-
-![](./static/inference_done.png)
-
-In this section, you are asked to: 
-- Create an `endpoint` that allows you to `save` the prediction results into a `SQlite table`.
-- Display the `contents` of the SQlite table after each inference run.
-
-Hints: Think about using `SQLALchemy`
-
-### 5 - Unit testing
-
-As mentioned previously, your code should be unit tested. 
-
-Hints: Use `pytest` for your unit tests as well as `mocks` for external services.
+If you have any questions or need further clarification, please don't hesitate to reach out.
