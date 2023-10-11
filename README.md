@@ -20,7 +20,7 @@ I refactored the codebase following clean code guidelines. The main improvements
 
 Additionally, I sought out and addressed any other code anomalies throughout the entire project to improve the codebase further.
 
-**For example**, there was an error in the display of the title of the confusion matrix; it was a fixed title for `Naive Bayes``, and I made it dynamic, and it changed based on the model that the user chose.
+**For example**, there was an error in the display of the title of the confusion matrix; it was a fixed title for `Naive Bayes`, and I made it dynamic, and it changed based on the model that the user chose.
 
 ## Task 2 - Exploratory Data Analysis
 
